@@ -53,6 +53,10 @@ more_info_element = browser.find_link_by_partial_text('more info')
 image_soup = bs(browser.html, 'html.parser')
 
 img_url = image_soup.select_one('figure.lede a img').get('src')
+try:
+        img_url = img.get('src')
+    except AttributeError:
+        return None
 img_url
 
 # Use the previously-defined url to create new url

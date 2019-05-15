@@ -37,9 +37,6 @@ def mars_news(browser):
 
 # Part 2 - JPL Mars Space Images - Featured Image
 
-# Visit url
-chrome_path = {"executable_path": "chromedriver"}
-browser = Browser("chrome", **chrome_path)
 
 def featured_image(browser):
     jpg_url = "https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars"
@@ -67,9 +64,6 @@ def featured_image(browser):
     return jpg_url
 
 # Part 3 - Mars Weather
-# Visit url
-chrome_path = {"executable_path": "chromedriver"}
-browser = Browser("chrome", **chrome_path)
 
 def weather_twitter(browser):
     weather_url = "https://twitter.com/marswxreport?lang=en"
@@ -98,14 +92,12 @@ def mars_facts():
 #         mars_tables
     except BaseException:
         return None
-    df.columns = ['description', 'value']
-    df.set_index('description', inpplace=True)
+    mars_tables.columns = ['description', 'value']
+    mars_tables.set_index('description', inplace=True)
 
 # Part 5 - Mars Hemispheres
 
 # Visit url
-chrome_path = {"executable_path": "chromedriver"}
-browser = Browser("chrome", **chrome_path)
 
 def hemisphere(browser):
     hemispheres_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"

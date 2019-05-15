@@ -50,18 +50,19 @@ def featured_image(browser):
     # Locate the "more info" button and click
     browser.is_element_present_by_text('more info', wait_time=1)
     more_info_element = browser.find_link_by_partial_text('more info')
+    more_info_element.click()
     
     jpg_soup = bs(browser.html, 'html.parser')
 #     jpg_soup
     
     jpg_url = jpg_soup.select_one('figure.lede a img').get('src')
     try:
-        jpg_url = img.get('src')
+        image_url = img.get('src')
     except AttributeError:
         return None
     
-    jpg_url = f'https://www.jpl.nasa.gov{jpg_url}'
-    return jpg_url
+    image_url = f'https://www.jpl.nasa.gov{jpg_url}'
+    return image_url
 
 # Part 3 - Mars Weather
 

@@ -5,6 +5,7 @@ import os
 import requests
 from bs4 import BeautifulSoup as bs
 from splinter import Browser
+import datetime as dt
 
 # Step 1 - NASA Mars News
 chrome_path = {"executable_path": "chromedriver"}
@@ -44,7 +45,7 @@ def featured_image(browser):
     
     # Locate the "full_image" button and click
     full_image_button = browser.find_by_id('full_image')
-    full_image_button.click
+    full_image_button.click()
     #For testing to see if an element is printing: browser.is_element_present_by_text(text = "For Insight, Dust", wait_time=2)
     
     # Locate the "more info" button and click
@@ -55,14 +56,14 @@ def featured_image(browser):
     jpg_soup = bs(browser.html, 'html.parser')
 #     jpg_soup
     
-    jpg_url = jpg_soup.select_one('figure.lede a img').get('src')
+    # jpg_url = jpg_soup.select_one('figure.lede a img').get('src')
     try:
-        image_url = img.get('src')
+         img_url = jpg_soup.select_one('figure.lede a img').get('src')
     except AttributeError:
         return None
     
-    image_url = f'https://www.jpl.nasa.gov{jpg_url}'
-    return image_url
+    jpg_url = f'https://www.jpl.nasa.gov{img_url}'
+    return img_url
 
 # Part 3 - Mars Weather
 
@@ -76,7 +77,7 @@ def weather_twitter(browser):
     weather_tweet = weather_soup.find('div', 
                                        attrs={
                                            "class": "tweet", 
-                                            "data-name": "Mars Weather"
+                                            "data-name": "Mars Weather"})
 #     print(weather_tweet)
     # Locate the tweet text
     mars_weather = weather_tweet.find('p', 'tweet-text').get_text()
@@ -89,7 +90,7 @@ def mars_facts():
 # Define url
     try:
     # Web scrape using Pandas
-        mars_tables = pd.read_html(mars_url)
+        mars_tables = pd.read_html(mars_url)[1]
 #         mars_tables
     except BaseException:
         return None
@@ -111,7 +112,7 @@ def hemisphere(browser):
     for result in range(len(hemisphere_results)):
         hemisphere = {}
     
-        browser.find_by_css('a.product-item h3')[item].click()
+        browser.find_by_css('a.product-item h3')[result].click()
         
         hemisphere_sample = browser.find_link_by_text('Sample').first
         hemisphere['img_url'] = hemisphere_sample['href']
@@ -135,7 +136,7 @@ def hemisphere_scrape(html_text):
         hemisphere_title = None
         hemisphere_sample_soup = None 
     hemisphere = {
-        "title": title_element,
+        "title": hemisphere_title,
         "img_url": hemisphere_sample_soup
     }
     return hemisphere
@@ -146,7 +147,7 @@ def scrape_all():
     browser = Browser('chrome', **executable_path)
     news_title, news_text = mars_news(browser)
     jpg_url = featured_image(browser)
-    mars_weather = twitter_weather(browser)
+    mars_weather = weather_twitter(browser)
     hemisphere_dictionary = hemisphere(browser)
     facts = mars_facts()
     timestamp = dt.datetime.now()
